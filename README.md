@@ -50,3 +50,6 @@ public class Main {
     }
 }
 ```
+<br>
+
+![screenshot](https://github.com/user-attachments/assets/ab635129-bf9c-4ca5-9f0b-28a779de77d1)
