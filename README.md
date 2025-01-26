@@ -12,3 +12,6 @@ this project include not only bindings themself, but native libraries too.
 Ready to learn? Jump to [code examples!](https://www.raylib.com/examples.html)
 
 ---
+
+
+[![GitHub Releases Downloads](https://img.shields.io/github/downloads/Monsler/raylib4j/total)](https://github.com/Monsler/raylib4j/releases)
