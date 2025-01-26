@@ -5,4 +5,8 @@
 
 raylib is highly inspired by Borland BGI graphics lib and by XNA framework and it's especially well suited for prototyping, tooling, graphical applications, embedded systems and education.
 
-This project include not only bindings themself, but native libraries too.
+this project include not only bindings themself, but native libraries too.
+
+Ready to learn? Jump to [code examples!](https://www.raylib.com/examples.html)
+
+---
