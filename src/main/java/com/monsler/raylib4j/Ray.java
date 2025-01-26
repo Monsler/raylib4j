@@ -55,6 +55,17 @@ public interface Ray extends Library {
         }
     }
 
+    class RenderTexture extends Structure implements Structure.ByValue {
+        public int id;
+        public Texture texture;
+        public Texture depth;
+
+        @Override
+        protected List<String> getFieldOrder() {
+            return Arrays.asList("id", "texture", "depth");
+        }
+    }
+
     class Rectangle extends Structure implements Structure.ByValue {
         public int x;
         public int y;
@@ -68,49 +79,51 @@ public interface Ray extends Library {
             this.height = height;
         }
 
+        public Rectangle() {
+            this(0, 0, 0, 0);
+        }
+
         @Override
         protected List<String> getFieldOrder() {
             return Arrays.asList("x", "y", "width", "height");
         }
     }
 
-    class Texture extends Structure implements Structure.ByValue {
-        int id;
-        int width;
-        int height;
-        int mipmaps;
-        int format;
-
-        public Texture(int id, int width, int height, int mipmaps, int format) {
-            this.id = id;
-            this.width = width;
-            this.height = height;
-            this.mipmaps = mipmaps;
-            this.format = format;
-        }
-        public Texture(){}
+    class GlyphInfo extends Structure implements Structure.ByValue {
+        public int value;
+        public int offsetX;
+        public int offsetY;
+        public int advanceX;
+        public Image image;
 
         @Override
         protected List<String> getFieldOrder() {
-            return Arrays.asList("id", "width", "height", "mipmaps", "format");
+            return Arrays.asList("value", "offsetX", "offsetY", "advanceX", "image");
         }
     }
 
-    class Texture2D extends Structure implements Structure.ByValue {
-        int id;
-        int width;
-        int height;
-        int mipmaps;
-        int format;
+    class Font extends Structure implements Structure.ByValue {
+        public int baseSize;
+        public int glyphCount;
+        public int glyphPadding;
+        public Texture texture;
+        public Rectangle recs;
+        public GlyphInfo glyphs;
 
-        public Texture2D(int id, int width, int height, int mipmaps, int format) {
-            this.id = id;
-            this.width = width;
-            this.height = height;
-            this.mipmaps = mipmaps;
-            this.format = format;
+        @Override
+        protected List<String> getFieldOrder() {
+            return Arrays.asList("baseSize", "glyphCount", "glyphPadding", "texture", "recs", "glyphs");
         }
-        public Texture2D(){}
+    }
+
+    class Texture extends Structure implements Structure.ByValue {
+        public int id;
+        public int width;
+        public int height;
+        public int mipmaps;
+        public int format;
+
+        public Texture(){}
 
         @Override
         protected List<String> getFieldOrder() {
@@ -166,6 +179,8 @@ public interface Ray extends Library {
     Color beige = new Color((byte)211, (byte)176, (byte)131, (byte)255);    // Beige
     Color brown = new Color((byte)127, (byte)106, (byte)79, (byte)255);     // Brown
     Color darkBrown = new Color((byte)76, (byte)63, (byte)47, (byte)255);    // Dark Brown
+    Color black = new Color((byte)0, (byte)0, (byte)0, (byte)0);
+    Color white = new Color((byte)255, (byte)255, (byte)255, (byte)255);
 
     String GetClipboardText();
     void SetClipboardText(String text);
@@ -191,9 +206,62 @@ public interface Ray extends Library {
     Image GenImageColor(int width, int height, Color color);
     Image ImageCopy(Image image);
     void ImageClearBackground(Image dst, Color color);
-    void DrawTexture(Texture2D texture, int posX, int posY, Color tint);
-    Texture2D LoadTexture(String fileName);
-    Texture2D LoadTextureFromImage(Image image);
+    void DrawTexture(Texture texture, int posX, int posY, Color tint);
+    Texture LoadTexture(String fileName);
+    Texture LoadTextureFromImage(Image image);
+    int GetTouchX();                                    // Get touch position X for touch point 0 (relative to screen size)
+    int GetTouchY();
+    void ImageBlurGaussian(Image image, int blurSize);
+    boolean ColorIsEqual(Color col1, Color col2);
+    Font GetFontDefault();
+    Font LoadFont(String fileName);
+    Font LoadFontFromImage(Image image, Color key, int firstChar);
+    void DrawFPS(int posX, int posY);
+    void DrawText(String text, int posX, int posY, int fontSize, Color color);
+    int MeasureText(String text, int fontSize);
+    boolean ExportFontAsCode(Font font, String fileName);
+    void DrawTextEx(Font font, String text, Vector2 position, float fontSize, float spacing, Color tint);
+    void SetConfigFlags(int flags);
+    int FLAG_MSAA_4X_HINT   = 0x00000020;
+    int FLAG_VSYNC_HINT     = 0x00000040,
+    FLAG_FULLSCREEN_MODE    = 0x00000002,
+    FLAG_WINDOW_RESIZABLE   = 0x00000004,
+    FLAG_WINDOW_UNDECORATED = 0x00000008,
+    FLAG_WINDOW_HIDDEN      = 0x00000080,
+    FLAG_WINDOW_MINIMIZED   = 0x00000200,
+    FLAG_WINDOW_MAXIMIZED   = 0x00000400,
+    FLAG_WINDOW_UNFOCUSED   = 0x00000800,
+    FLAG_WINDOW_TOPMOST     = 0x00001000,
+    FLAG_WINDOW_ALWAYS_RUN  = 0x00000100,
+    FLAG_WINDOW_TRANSPARENT = 0x00000010,
+    FLAG_WINDOW_HIGHDPI     = 0x00002000,
+    FLAG_WINDOW_MOUSE_PASSTHROUGH = 0x00004000,
+    FLAG_BORDERLESS_WINDOWED_MODE = 0x00008000;
+    void SetTextureFilter(Texture texture, int filter);
+    int TEXTURE_FILTER_POINT = 0;           // No filter, just pixel approximation
+    int TEXTURE_FILTER_BILINEAR = 1;             // Linear filtering
+    int TEXTURE_FILTER_TRILINEAR = 2;   // Trilinear filtering (linear with mipmaps)
+    int TEXTURE_FILTER_ANISOTROPIC_4X = 3;          // Anisotropic filtering 4x
+    int TEXTURE_FILTER_ANISOTROPIC_8X = 4;  // Anisotropic filtering 8x
+    int TEXTURE_FILTER_ANISOTROPIC_16X = 5;
+    float GetFrameTime();
+    void TakeScreenshot(String fileName);
+    boolean FileExists(String fileName);
+    boolean DirectoryExists(String directory);
+    String GetWorkingDirectory();
+    void SetMousePosition(int x, int y);
+    int GetTouchPointCount();
+
+    boolean IsKeyPressed(int keyCode);
+    boolean IsKeyPressedRepeat(int key);                       // Check if a key has been pressed again
+    boolean IsKeyDown(int key);                                // Check if a key is being pressed
+    boolean IsKeyReleased(int key);
+    boolean IsKeyUp(int key);
+    void SetMouseOffset(int offsetX, int offsetY);
+    void SetMouseCursor(int cursor);
+    void ImageRotate(Image image, int degrees);
+
+    String R4JVersion = "1.0";
 }
 
 

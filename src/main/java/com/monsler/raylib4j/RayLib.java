@@ -6,10 +6,15 @@ import com.sun.jna.Platform;
 public class RayLib {
     private static Ray raylib;
     public static void init() {
-        if (Platform.isWindows()) {
+        System.out.println("INFO: Hello from raylib4j "+Ray.R4JVersion);
+        if (Platform.isWindows() && Platform.is64Bit()) {
             raylib = Native.load("raylib", Ray.class);
         } else if(Platform.isLinux()) {
             raylib = Native.load("libraylib", Ray.class);
+        } else if(Platform.isAndroid()) {
+            raylib = Native.load("libraylib_mac", Ray.class);
+        } else if (Platform.isWindows() && !Platform.is64Bit()) {
+            raylib = Native.load("raylib32", Ray.class);
         }
     }
 
@@ -177,15 +182,125 @@ public class RayLib {
         raylib.ImageClearBackground(image, color);
     }
 
-    public static void drawTexture(Ray.Texture2D texture, int x, int y, Ray.Color color) {
+    public static void drawTexture(Ray.Texture texture, int x, int y, Ray.Color color) {
         raylib.DrawTexture(texture, x, y, color);
     }
 
-    public static Ray.Texture2D loadTexture(String filename) {
+    public static Ray.Texture loadTexture(String filename) {
         return raylib.LoadTexture(filename);
     }
 
-    public static Ray.Texture2D loadTextureFromImage(Ray.Image image) {
+    public static Ray.Texture loadTextureFromImage(Ray.Image image) {
         return raylib.LoadTextureFromImage(image);
+    }
+
+    public static int getTouchX() {
+        return raylib.GetTouchX();
+    }
+    public static int getTouchY() {
+        return raylib.GetTouchY();
+    }
+
+    public static void imageBlurGaussian(Ray.Image image, int blurSize) {
+        raylib.ImageBlurGaussian(image, blurSize);
+    }
+
+    public static boolean colorIsEqual(Ray.Color color1, Ray.Color color2) {
+        return raylib.ColorIsEqual(color1, color2);
+    }
+
+    public static Ray.Font getFontDefault() {
+        return raylib.GetFontDefault();
+    }
+    public static Ray.Font loadFont(String filename) {
+        return raylib.LoadFont(filename);
+    }
+    public static Ray.Font loadFontFromImage(Ray.Image image, Ray.Color color, int firstChar) {
+        return raylib.LoadFontFromImage(image, color, firstChar);
+    }
+
+    public static void drawFps(int posX, int posY) {
+        raylib.DrawFPS(posX, posY);
+    }
+    public static void drawText(String text, int posX, int posY, int fontSize, Ray.Color color) {
+        raylib.DrawText(text, posX, posY, fontSize, color);
+    }
+
+    public static int measureText(String text, int fontSize) {
+        return raylib.MeasureText(text, fontSize);
+    }
+
+    public static boolean exportFontAsCode(Ray.Font font, String filename) {
+        return raylib.ExportFontAsCode(font, filename);
+    }
+
+    public static void drawTextEx(Ray.Font font, String text, Ray.Vector2 pos, float fontSize, float spacing, Ray.Color color) {
+        raylib.DrawTextEx(font, text, pos, fontSize, spacing, color);
+    }
+
+    public static void setConfigFlags(int flags) {
+        raylib.SetConfigFlags(flags);
+    }
+
+    public static void setTextureFilter(Ray.Texture texture, int filter) {
+        raylib.SetTextureFilter(texture, filter);
+    }
+
+    public static float getFrameTime() {
+        return raylib.GetFrameTime();
+    }
+
+    public static void takeScreenshot(String filename) {
+        raylib.TakeScreenshot(filename);
+    }
+
+    public static boolean fileExists(String filename) {
+        return raylib.FileExists(filename);
+    }
+    public static boolean directoryExists(String filename) {
+        return raylib.DirectoryExists(filename);
+    }
+    public static String getWorkingDirectory() {
+        return raylib.GetWorkingDirectory();
+    }
+
+    public static void setMousePosition(int x, int y) {
+        raylib.SetMousePosition(x, y);
+    }
+
+    public static int getTouchPointCount() {
+        return raylib.GetTouchPointCount();
+    }
+
+    public static boolean isKeyPressed(int key) {
+        return raylib.IsKeyPressed(key);
+    }
+
+    public static boolean isKeyReleased(int key) {
+        return raylib.IsKeyReleased(key);
+    }
+
+    public static boolean isKeyDown(int key) {
+        return raylib.IsKeyDown(key);
+    }
+
+    public static boolean isKeyPressedRepeat(int key) {
+        return raylib.IsKeyPressedRepeat(key);
+    }
+
+    public static boolean isKeyUp(int key) {
+        return raylib.IsKeyUp(key);
+    }
+
+    public static void setMouseOffset(int x, int y) {
+        raylib.SetMouseOffset(x, y);
+    }
+
+    public static void setMouseCursor(int cursor) {
+        raylib.SetMouseCursor(cursor);
+    }
+
+    public static void imageRotate(Ray.Image image, int angle) {
+        raylib.ImageRotate(image, angle);
     }
 }
