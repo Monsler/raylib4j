@@ -19,7 +19,7 @@ Ready to learn? Jump to [code examples!](https://www.raylib.com/examples.html)
 [![GitHub Releases Downloads](https://img.shields.io/github/downloads/Monsler/raylib4j/total)](https://github.com/Monsler/raylib4j/releases)
 [![GitHub Stars](https://img.shields.io/github/stars/Monsler/raylib4j?style=flat&label=stars)](https://github.com/Monsler/raylib4j/stargazers)
 
-Hello world code
+basic example
 ------
 
 ```java
@@ -53,3 +53,9 @@ public class Main {
 <br>
 
 ![screenshot](https://github.com/user-attachments/assets/ab635129-bf9c-4ca5-9f0b-28a779de77d1)
+
+features
+------
+ - **NO external dependencies**, all required libraries are bundled into raylib4j
+ - Write once, run everywhere: **Windows, Linux, MacOS, Android... and more!**
+ - Hardware accelerated with OpenGL (**1.1, 2.1, 3.3, 4.3, ES 2.0, ES 3.0**)
