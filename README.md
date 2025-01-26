@@ -22,3 +22,30 @@ Ready to learn? Jump to [code examples!](https://www.raylib.com/examples.html)
 Hello world code
 ------
 
+```java
+import com.monsler.raylib4j.Ray;
+import com.monsler.raylib4j.RayLib;
+
+public class Main {
+    public static void main(String[] args) {
+        RayLib.init();
+        RayLib.initWindow(450, 300, "raylib4j");
+        var closed = false;
+
+        RayLib.setTargetFps(120); // set up the fps limit
+
+        while (!closed) {
+            if (RayLib.windowShouldClose()) {
+                closed = true;
+            }
+
+            RayLib.clearBackground(Ray.black);
+            RayLib.beginDrawing();
+            RayLib.drawFps(10, 10);
+            RayLib.drawText("Hello, world!", 10, 30, 20, Ray.white);
+            RayLib.endDrawing();
+        }
+
+        RayLib.closeWindow(); // shut down the program after the window has been closed
+    }
+}```
