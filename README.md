@@ -46,7 +46,7 @@ public class Main {
             RayLib.endDrawing();
         }
 
-        RayLib.closeWindow(); // shut down the program after the window has been closed
+        RayLib.closeWindow(); // shut the program down after the window has been closed
     }
 }
 ```
